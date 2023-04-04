@@ -1,5 +1,10 @@
 import express from "express";
-import { createProject, projectTitles, getProjectTitles, getAllProjectTitles } from "../service/tools.service.js";
+import { createProject, 
+    projectTitles, 
+    getProjectTitles, 
+    getAllProjectTitles, 
+    getProjectById,
+    updateProjectById } from "../service/tools.service.js";
 
 const router = express.Router();
 
@@ -18,11 +23,29 @@ router.post("/projectCreation", async function (request, response) {
     }
 })
 
-router.get("/dashboard", async function (request, response) {
+router.get("/showprojects", async function (request, response) {
 
     const res = await getAllProjectTitles()
 
     response.send(res)
+})
+
+router.get("/showprojects/:id", async function (request, response) {
+    const {id} = request.params
+
+    const result = await getProjectById(id)
+
+    result ? response.send(result) : response.status(404).send({message: "Project Not Found"})
+})
+
+router.put("/updateProject/:id", async function (request, response) {
+
+    const { id } = request.params
+    const data = request.body
+    
+    const result = await updateProjectById(id, data)
+
+    response.send(result)
 })
 
 export default router

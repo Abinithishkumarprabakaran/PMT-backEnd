@@ -29,3 +29,18 @@ export async function getAllProjectTitles() {
         .find({})
         .toArray();
 }
+
+export async function getProjectById(id) {
+    return await client
+        .db("ProjectTitles")
+        .collection("titles")            
+        .findOne({_id: new ObjectId(id)})
+}
+
+export async function updateProjectById(id, data) {
+    return await client
+        .db("ProjectTitles")
+        .collection("titles")            
+        .updateOne({_id: new ObjectId(id)}, { $set: data })
+
+}
