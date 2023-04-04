@@ -44,3 +44,10 @@ export async function updateProjectById(id, data) {
         .updateOne({_id: new ObjectId(id)}, { $set: data })
 
 }
+
+export async function createTask(projectAvailable, data) {
+    return await client
+        .db(`${projectAvailable.projectTitle}`)
+        .collection("Tasks")
+        .insertOne(data);
+}

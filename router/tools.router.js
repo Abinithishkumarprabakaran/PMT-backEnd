@@ -4,7 +4,8 @@ import { createProject,
     getProjectTitles, 
     getAllProjectTitles, 
     getProjectById,
-    updateProjectById } from "../service/tools.service.js";
+    updateProjectById,
+    createTask } from "../service/tools.service.js";
 
 const router = express.Router();
 
@@ -46,6 +47,26 @@ router.put("/updateProject/:id", async function (request, response) {
     const result = await updateProjectById(id, data)
 
     response.send(result)
+})
+
+router.post("/taskCreation/:id", async function (request, response) {
+
+    const { id } = request.params
+
+    const data = request.body
+
+    const projectAvailable = await getProjectById(id)
+
+    if(!projectAvailable){
+        response.status(404).send({ message: "Create a Project"})
+    }
+    else {
+        // const { projectTitle } = projectAvailable
+        projectAvailable.projectTitle = projectAvailable.projectTitle.replace(/\s/g, "");
+    
+        const result =  await createTask(projectAvailable, data)
+        response.send(result)
+    }
 })
 
 export default router
